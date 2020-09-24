@@ -7,8 +7,26 @@
 ![Media](https://github.com/MasterCloudApps-Projects/ElasticTranscoder/workflows/Build%20docker%20media/badge.svg)
 
 
-## Full web application for transcode videos 
+## Elastic application for transcode videos using FFMPEG
+### Architecture and components
+![](doc/img/ElasticTranscoder.png)
+- Frontend use Angular 10 and material.
+- Transcoder: Springboot application (JDK 13) which read a SQS queue to transcode the video
+- Media-Storage: 
+- Media:
+- Transcoder-Status:
+- Transcoder-Handler:
+
+All microservices, including frontend, used [OKTA](https://www.okta.com/) to secured it. Please, [read here](doc/okta.md) to configure it for this proyect.
+
+The glusterFS cluster is optional, but mandatory if you want externalise the filesystem. [Read here](doc/gluster.md) to configure it.
+
+For configure AWS SQS and DynamoDB use [this](doc/aws.md).
 ### Deploy it:
+Need [HELM V3](https://helm.sh/docs/intro/install/) on your cluster.
+```
+helm add repo 
+```
 ####
 
 
