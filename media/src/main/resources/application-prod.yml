@@ -1,0 +1,14 @@
+logging:
+  level:
+    es:
+      videotranscoding: DEBUG             
+cloud:
+  aws:
+    region:
+      static: eu-west-1
+    stack:
+      auto: false  
+    sqs:
+      endpoint:
+        uri: 
+          delete-file: https://sqs.eu-west-1.amazonaws.com/836783797541/delete-file

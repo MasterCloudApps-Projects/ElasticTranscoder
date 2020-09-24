@@ -1,0 +1,85 @@
+<div class="table-full mat-elevation-z8">
+
+    <div class="spinner-container" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+    <mat-table  [dataSource]="transcodes">
+        <ng-container matColumnDef="type">
+            <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.type}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="filesize">
+            <mat-header-cell scope="filesize" *matHeaderCellDef> Filesize </mat-header-cell>
+            <ng-container *matCellDef="let element">
+                <mat-cell *ngIf="element.filesize ; else noReplies">{{element.filesize}} </mat-cell>
+            </ng-container>
+            <ng-template #noReplies>
+                <mat-cell mat-cell>-</mat-cell>
+            </ng-template>
+        </ng-container>
+        <ng-container matColumnDef="container">
+            <mat-header-cell *matHeaderCellDef> Container </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.container}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="videoCodec">
+            <mat-header-cell *matHeaderCellDef> Video Codec </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.videoCodec}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="audioCodec">
+            <mat-header-cell *matHeaderCellDef> Audio Codec </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.audioCodec}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="resolution">
+            <mat-header-cell *matHeaderCellDef> Resolution </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.resolution}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="bitrate">
+            <mat-header-cell *matHeaderCellDef> Bitrate </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.bitrate}}</mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="preset">
+            <mat-header-cell *matHeaderCellDef> Preset </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.preset}}</mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="complete">
+            <mat-header-cell *matHeaderCellDef> Complete </mat-header-cell>
+            <mat-cell *matCellDef="let element">{{element.processed}}</mat-cell>
+        </ng-container>
+
+
+        <ng-container matColumnDef="download">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button (click)="downloadVideo($event,element.id)" [disabled]="element.processed!=100 || element.active"
+                    mat-icon-button color="primary" aria-label="Download media">
+                    <mat-icon>cloud_download</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+        <ng-container matColumnDef="watch">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button matTooltip="MKV videos can not be played" [matTooltipDisabled]="!isMkv(element)"
+                    (click)="watchVideo($event,element.id)"
+                    [disabled]="element.processed!=100 || element.active || isMkv(element)" mat-icon-button
+                    color="primary" aria-label="Watch media">
+                    <mat-icon>play_circle_outline</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+
+        <ng-container matColumnDef="delete">
+            <mat-header-cell *matHeaderCellDef></mat-header-cell>
+            <mat-cell *matCellDef="let element">
+                <button (click)="deleteMedia($event,element)" [disabled]="element.processed!=100 && element.active"
+                    mat-icon-button color="accent" aria-label="Delete media">
+                    <mat-icon>delete_outline</mat-icon>
+                </button>
+            </mat-cell>
+        </ng-container>
+        <mat-header-row  *matHeaderRowDef="displayedColumns"></mat-header-row>
+        <mat-row *matRowDef="let row; columns: displayedColumns;">
+        </mat-row>
+    </mat-table>
+</div>

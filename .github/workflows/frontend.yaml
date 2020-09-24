@@ -1,0 +1,47 @@
+name: Build docker frontend
+on: 
+  push: 
+    paths:
+    - 'frontend/**'
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: frontend
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Use Node.js ${{ matrix.node-version }}
+        uses: actions/setup-node@v1
+        with:
+          node-version: ${{ matrix.node-version }}
+      - name: Npm install
+        run: |
+          npm install 
+      - name: Npm build prod 
+        run: |   
+          npm run build 
+      - name: Dockerhub login
+        run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin  
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3.1.0
+        with:
+          buildx-version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}         
+      - name: Docker Buildx  (push)
+        run: |
+          docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+            --output "type=image,push=true" \
+            --tag "elastictranscoder/frontend:${GITHUB_SHA::8}" \
+            --file Dockerfile .     
+      - name: Docker Check Manifest
+        if: always() && startsWith(github.ref, 'refs/tags/')
+        run: |
+          docker run --rm mplatform/mquery ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+      - name: Clear
+        if: always() && startsWith(github.ref, 'refs/tags/')
+        run: |
+          rm -f ${HOME}/.docker/config.json    

@@ -1,0 +1,18 @@
+path:
+  media:
+    flat: /media/elastictranscoder-data/FlatMedia/
+    transcode: /media/elastictranscoder-data/TranscodeMedia/
+logging:
+  level:
+    es:
+      videotranscoding: DEBUG    
+cloud:
+  aws:
+    region:
+      static: eu-west-1
+    stack:
+      auto: false  
+    sqs:
+      endpoint:
+        uri: 
+          transcoder-status: https://sqs.eu-west-1.amazonaws.com/836783797541/transcoder-status.fifo   

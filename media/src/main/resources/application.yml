@@ -1,0 +1,25 @@
+management:
+  health:
+    probes:
+      enabled: true
+spring:
+  profiles:
+    active: dev
+  servlet:
+    multipart:
+      max-file-size: 5GB
+      max-request-size: 5GB
+  security:
+    oauth2:
+      client:
+        provider:
+          okta:
+            issuer-uri: ${OKTA_OAUTH2_ISSUER}
+        registration:
+          okta:
+            client-id: ${OKTA_OAUTH2_CLIENT_ID}
+            client-secret: ${OKTA_OAUTH2_CLIENT_SECRET}
+      resourceserver:
+        jwt:
+          jwk-set-uri:  ${OKTA_OAUTH2_ISSUER}/v1/keys
+          

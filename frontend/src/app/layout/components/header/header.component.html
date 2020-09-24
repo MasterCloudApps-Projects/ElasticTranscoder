@@ -1,0 +1,24 @@
+<mat-toolbar color="accent">
+    <img alt="VideoTranscoding" class="img-responsive logo_navbar"
+        src="assets/images/VideoTranscoding_white_mini_logo.png" width="40px">
+    <span>ElasticTranscoder</span>
+    <span class="example-spacer"></span>
+    <span *ngIf="isAuthenticated" [matMenuTriggerFor]="menu" fxShow="true" fxHide.lt-md="true"
+        class="span-user">{{user}}</span>
+    <span *ngIf="!isAuthenticated">
+        <button (click)="login()" mat-icon-button class="example-icon" aria-label="user">
+            <mat-icon>login</mat-icon>
+        </button>
+    </span>
+    <span *ngIf="isAuthenticated">
+        <button [matMenuTriggerFor]="menu" mat-icon-button class="example-icon" aria-label="user">
+            <mat-icon>account_box</mat-icon>
+        </button>
+    </span>
+    <mat-menu #menu="matMenu">
+        <button (click)="logout()" mat-menu-item>
+            <mat-icon>power_settings_new</mat-icon>
+            <span>Log Out</span>
+        </button>
+    </mat-menu>
+</mat-toolbar>

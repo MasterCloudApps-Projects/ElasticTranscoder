@@ -1,0 +1,36 @@
+<input type="file" #file style="display: none" (change)="onFilesAdded()" multiple />
+<div class="container" fxLayout="column" fxLayoutAlign="space-evenly stretch">
+    <h1 mat-dialog-title>Upload Files</h1>
+    <mat-divider></mat-divider>
+    <div>
+        <button [class.hidden]="uploading || uploadSuccessful" mat-raised-button color="primary" class="add-files-btn"
+            (click)="addFiles()">
+            Add Files
+        </button>
+    </div>
+
+    <!-- This is the content of the dialog, containing a list of the files to upload -->
+    <mat-dialog-content fxFlex>
+        <mat-list>
+            <mat-list-item *ngFor="let file of files">
+                <h4 mat-line>{{file.name}}</h4>
+                <mat-progress-bar color="warn" *ngIf="progress" mode="determinate" [value]="progress[file.name].progress | async">
+                </mat-progress-bar>
+                <button [disabled]="uploading || uploadSuccessful" mat-icon-button (click)="deleteFile(file)"
+                    aria-label="Delete File">
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </mat-list-item>
+        </mat-list>
+    </mat-dialog-content>
+
+    <!-- This are the actions of the dialog, containing the primary and the cancel button-->
+    <mat-dialog-actions class="actions">
+        <button *ngIf="showCancelButton" mat-button mat-dialog-close>Back</button>
+        <button mat-raised-button color="primary" [disabled]="!canBeClosed" (click)="closeDialog()">
+            Upload
+        </button>
+        <button *ngIf="showFinishButton" mat-button mat-dialog-close>Finish</button>
+
+    </mat-dialog-actions>
+</div>

@@ -1,0 +1,15 @@
+<div class="container">
+  <h3 mat-dialog-title>Are you sure?</h3>
+  <div class="spinner-container" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+  </div>
+  <div mat-dialog-content  *ngIf="!loading">
+    Name: {{data.media.name}}
+    <p></p>
+  </div>
+
+  <div mat-dialog-actions>
+    <button mat-raised-button (click)="onNoClick()" tabindex="-1">Cancel</button>
+    <button mat-raised-button color="warn" (click)="confirmDelete()">Delete</button>
+  </div>
+</div>

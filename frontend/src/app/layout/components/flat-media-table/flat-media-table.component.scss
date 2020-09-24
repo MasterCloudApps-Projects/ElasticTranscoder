@@ -1,0 +1,105 @@
+.edit-icon {
+  cursor: pointer;
+}
+.mat-column-select {
+  overflow: initial;
+}
+/*TOCAR A PARTIR DE AQUi*/
+
+// ::ng-deep mat-row.example-detail-row {
+//   height: 0 ;
+// }
+
+.mat-header-cell:first-child,.mat-cell:first-child{
+  flex:10%;
+}
+//Second column and header
+// .mat-header-cell:nth-child(2),.mat-cell:nth-child(2){
+//   flex:85%;
+// }
+//Last column and header
+.mat-header-cell:last-child,.mat-cell:last-child{
+  flex:1%
+}
+
+::ng-deep mat-row.example-element-row:not(.example-expanded-row):hover {
+  background: whitesmoke;
+  cursor: pointer;
+}
+mat-row, mat-footer-row {
+  min-height: 0px;
+}
+::ng-deep mat-row.example-element-row:not(.example-expanded-row):active {
+  background: whitesmoke;
+}
+.example-expanded-row {
+  background: whitesmoke;
+  cursor: pointer;
+}
+.ma
+.example-element-row td {
+  border-bottom-width: thin;
+}
+.example-element-detail {
+  overflow: hidden;
+  width: 100%;
+}
+
+th.mat-header-cell {
+  border-bottom-width: 1px !important;
+}
+td.mat-cell {
+  border-bottom-width: 0px;
+}
+td.mat-footer-cell {
+  border-bottom-width: 1px !important;
+}
+/*HASTA AQUI*/
+/*
+  NEW BUTTONS
+  */
+.spinner-container {
+  position: absolute;
+  top: 0;
+  left: 0;
+  bottom: 56px;
+  right: 0;
+  background: rgba(0, 0, 0, 0.15);
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.table-full{
+  position: relative;
+  min-height: 200px;
+}
+
+.example-label {
+  display: table-cell;
+  font-size: 14px;
+  margin-left: 8px;
+  min-width: 120px;
+}
+
+.example-button-row {
+  display: table-cell;
+  width: 100%;
+  padding-bottom: 1rem;
+}
+
+.example-button-row .mat-button-base {
+  margin: 8px 8px 8px 0;
+}
+
+.example-flex-container {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+}
+
+.example-button-container {
+  display: flex;
+  justify-content: center;
+  width: 120px;
+}

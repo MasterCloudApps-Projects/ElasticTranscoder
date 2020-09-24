@@ -1,0 +1,111 @@
+<div class="container" >
+    <h3 mat-dialog-title>Media: {{data.media.name}}</h3>
+    <div class="spinner-container" *ngIf="loading">
+        <mat-spinner></mat-spinner>
+    </div>
+    <ng-container *ngIf="data.media.type ==='video' && !loading">
+        <form class="mat-dialog-content" (ngSubmit)="onSubmitVideo()" [formGroup]="transcodesFormGroup">
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Containers</mat-label>
+                    <mat-select formControlName="containersVideo" multiple required>
+                        <mat-option *ngFor="let topping of transcodes.videoContainers" [value]="topping">{{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Video codecs</mat-label>
+                    <mat-select formControlName="codecsVideo" multiple required>
+                        <mat-option *ngFor="let topping of transcodes.codecsVideo" [value]="topping">{{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Audio codecs</mat-label>
+                    <mat-select formControlName="codecsAudio" multiple required>
+                        <mat-option color="warn" *ngFor="let topping of transcodes.codecsAudio" [value]="topping">
+                            {{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Resolutions</mat-label>
+                    <mat-select formControlName="resolutions" multiple required>
+                        <mat-option *ngFor="let topping of transcodes.resolutions" [value]="topping">{{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Presets</mat-label>
+                    <mat-select formControlName="presets" multiple required>
+                        <mat-option *ngFor="let topping of transcodes.presets" [value]="topping">{{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+            <div mat-dialog-actions>
+                <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+                <button mat-raised-button [disabled]="!transcodesFormGroup.valid" type="submit">Accept</button>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template *ngIf="!loading" #audio>
+        <form class="mat-dialog-content" (ngSubmit)="onSubmitAudio()" [formGroup]="transcodesFormGroup">
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Audio Containers</mat-label>
+                    <mat-select formControlName="containersAudio" multiple required>
+                        <mat-option *ngFor="let topping of transcodes.audioContainers" [value]="topping">{{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div class="form">
+                <mat-form-field appearance="fill">
+                    <mat-label>Audio codecs</mat-label>
+                    <mat-select formControlName="codecsAudio" multiple required>
+                        <mat-option color="warn" *ngFor="let topping of transcodes.codecsAudio" [value]="topping">
+                            {{topping}}
+                        </mat-option>
+                    </mat-select>
+                    <mat-error *ngIf="transcodesFormGroup.hasError('required')">
+                        This field is required
+                    </mat-error>
+                </mat-form-field>
+            </div>
+
+            <div mat-dialog-actions>
+                <button mat-raised-button color="warn" type="button" (click)="cancel()">Cancel</button>
+                <button mat-raised-button [disabled]="!transcodesFormGroup.valid" type="submit">Accept</button>
+            </div>
+        </form>
+    </ng-template>
+</div>
+  

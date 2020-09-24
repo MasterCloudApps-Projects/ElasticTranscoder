@@ -1,0 +1,44 @@
+::ng-deep .mat-dialog-container {
+  padding: 0px !important;
+  display: block !important;
+  border-radius: 0px;
+  box-sizing: border-box;
+  overflow: unset;
+  outline: 0;
+  width: 100%;
+  height: auto;
+  min-height: inherit;
+  max-height: inherit;
+  position: relative;
+}
+
+::ng-deep .mat-icon {
+  z-index: 1;
+}
+
+
+::ng-deep .mat-dialog-container:hover .float-drag-button {
+  display: inline-table;
+}
+::ng-deep .mat-dialog-container:hover .float-cancel-button {
+  display: block !important;
+}
+vg-player {
+  display: flex;
+  position: inherit !important;
+}
+.float-drag-button {
+  position: absolute;
+  display: none;
+  top: 0.75rem;
+  cursor: move;
+  left: 1rem;
+}
+.float-cancel-button {
+  position: absolute;
+  display: none;
+  transition: display 3s;
+  top: 0.75rem;
+  right: 1rem;
+  cursor: pointer;
+}

@@ -1,0 +1,16 @@
+<ng-container cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+  <!-- <mat-icon class="float-drag-button"  color="accent">drag_handle</mat-icon> -->
+  <mat-icon class="float-cancel-button" color="accent" (click)="close()">cancel</mat-icon>
+  <mat-dialog-content cdkDragHandle>
+    <vg-player >
+      <video (click)="playPause($event)" [vgMedia]="media" #media id="singleVideo" preload="auto" controls autoplay>
+        <source [src]="safeUrl" type="video/mp4">
+      </video>
+      <!-- <video #myMedia #vgHls="vgHls"
+        [vgHls]="'https://s3-eu-west-1.amazonaws.com/s3.lavandadelpatio/hls-v2/prog_index.m3u8'"
+        [vgHlsHeaders]="headers" (onGetBitrates)="hlsBitrates = $event" id="my-video" type="video/mp4" controls
+        crossorigin="anonymous">
+      </video> -->
+    </vg-player>
+  </mat-dialog-content>
+</ng-container>

@@ -1,0 +1,43 @@
+name: Build docker transcoder-status
+on: 
+  push: 
+    paths:
+    - 'transcoder-status/**'
+jobs:
+  build:
+    defaults:
+      run:
+        working-directory: transcoder-status
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: Set up JDK 13
+        uses: actions/setup-java@v1
+        with:
+          java-version: 1.13
+      - name: Build Maven
+        run: mvn -B package -Dmaven.test.skip=true 
+      - name: Dockerhub login
+        run: echo ${{ secrets.REGISTRY_PASSWORD }} | docker login -u ${{ secrets.REGISTRY_USER }} --password-stdin  
+      - name: Set up Docker Buildx
+        id: buildx
+        uses: crazy-max/ghaction-docker-buildx@v3.1.0
+        with:
+          buildx-version: latest
+      - name: Available platforms
+        run: echo ${{ steps.buildx.outputs.platforms }}         
+      - name: Docker Buildx  (push)
+        run: |
+          docker buildx build \
+          --platform linux/amd64,linux/arm64 \
+            --output "type=image,push=true" \
+            --tag "elastictranscoder/transcoder-status:${GITHUB_SHA::8}" \
+            --file Dockerfile .     
+      - name: Docker Check Manifest
+        if: always() && startsWith(github.ref, 'refs/tags/')
+        run: |
+          docker run --rm mplatform/mquery ${{ steps.prepare.outputs.docker_image }}:${{ steps.prepare.outputs.version }}
+      - name: Clear
+        if: always() && startsWith(github.ref, 'refs/tags/')
+        run: |
+          rm -f ${HOME}/.docker/config.json    

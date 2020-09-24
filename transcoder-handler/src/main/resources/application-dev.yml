@@ -1,0 +1,19 @@
+path:
+    media:
+        flat: /home/luisca/Documentos/TFM/FFMPEG_Path/FlatMedia/
+        transcode: /home/luisca/Documentos/TFM/FFMPEG_Path/TranscodeMedia/
+logging:
+  level:
+    es:
+      videotranscoding: INFO        
+cloud:
+  aws:
+    region:
+      static: eu-west-1
+    stack:
+      auto: false  
+    sqs:
+      endpoint:
+        uri:
+          transcoder: https://sqs.eu-west-1.amazonaws.com/836783797541/transcoder
+          transcoder-hls: https://    

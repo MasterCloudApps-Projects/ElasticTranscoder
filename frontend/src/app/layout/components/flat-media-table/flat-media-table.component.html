@@ -1,0 +1,140 @@
+<div *ngIf="isAuthenticated; else noLogin">
+    <div class="example-button-row">
+        <button mat-raised-button color="warn" (click)="uploadContent()">Upload Content</button>
+        <button mat-raised-button color="warn" (click)="loadMedia()">Reload media table</button>
+    </div>
+    <div class="table-full mat-elevation-z8">
+
+        <div class="spinner-container" *ngIf="dataSource.loading$ | async">
+            <mat-spinner></mat-spinner>
+        </div>
+
+        <mat-table [dataSource]="dataSource" multiTemplateDataRows>
+
+            <ng-container matColumnDef="name">
+                <mat-header-cell *matHeaderCellDef> Name </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.name}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="type">
+                <mat-header-cell *matHeaderCellDef> Type </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.type}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="filesize">
+                <mat-header-cell scope="filesize" *matHeaderCellDef> Filesize </mat-header-cell>
+                <ng-container *matCellDef="let element">
+                    <mat-cell *ngIf="element.filesize ; else noFilesize">{{element.filesize}} </mat-cell>
+                </ng-container>
+                <ng-template #noFilesize>
+                    <mat-cell mat-cell>-</mat-cell>
+                </ng-template>
+            </ng-container>
+            <ng-container matColumnDef="duration">
+                <mat-header-cell *matHeaderCellDef> Duration </mat-header-cell>
+                <mat-cell *matCellDef="let element"> {{element.duration}} </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="bitrate">
+                <mat-header-cell *matHeaderCellDef> Bitrate </mat-header-cell>
+                <ng-container *matCellDef="let element">
+                    <mat-cell *ngIf="element.bitrate ; else noBitrate">{{element.bitrate}} </mat-cell>
+                </ng-container>
+                <ng-template #noBitrate>
+                    <mat-cell mat-cell>-</mat-cell>
+                </ng-template>
+            </ng-container>
+            <ng-container matColumnDef="container">
+                <mat-header-cell *matHeaderCellDef> Container </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.container}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="videoCodec">
+                <mat-header-cell *matHeaderCellDef> Video Codec </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.videoCodec}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="audioCodec">
+                <mat-header-cell *matHeaderCellDef> Audio Codec </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.audioCodec}}</mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="resolution">
+                <mat-header-cell *matHeaderCellDef> Resolution </mat-header-cell>
+                <mat-cell *matCellDef="let element">{{element.resolution}}</mat-cell>
+            </ng-container>
+
+            <ng-container matColumnDef="download">
+                <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+                <mat-cell  (click)="downloadVideo($event,element.id)" *matCellDef="let element">
+                    <button mat-icon-button color="primary" aria-label="Download media">
+                        <mat-icon>cloud_download</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="watch">
+                <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+                <mat-cell  (click)="watchVideo($event,element.id)" *matCellDef="let element">
+                    <button matTooltip="MKV videos can not be played" [matTooltipDisabled]="!isMkv(element)"
+                        mat-icon-button color="primary" aria-label="Watch media" [disabled]="isMkv(element)">
+                        <mat-icon>play_circle_outline</mat-icon>
+                    </button>
+                </mat-cell >
+            </ng-container>
+            <ng-container matColumnDef="edit">
+                <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+                <mat-cell  (click)="addTranscodes($event,element)" *matCellDef="let element">
+                    <button mat-icon-button color="primary" [disabled]="element.active" aria-label="Add transcode">
+                        <mat-icon>add_circle</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="delete">
+                <mat-header-cell  *matHeaderCellDef></mat-header-cell>
+                <mat-cell  *matCellDef="let element">
+                    <button (click)="deleteMedia($event,element)" [disabled]="element.active" mat-icon-button
+                        color="accent" aria-label="Delete media">
+                        <mat-icon>delete_outline</mat-icon>
+                    </button>
+                </mat-cell>
+            </ng-container>
+            <ng-container matColumnDef="expandedDetail">
+                <mat-cell  *matCellDef="let element" [attr.colspan]="displayedColumns.length">
+                    <div class="example-element-detail"
+                        [@detailExpand]="element == expandedElement ? 'expanded' : 'collapsed'">
+                        <ng-container *ngIf="element==expandedElement">
+                            <app-transcode-media-table (noTranscode)="noTranscodeData($event)"
+                                [flatMediaId]="element.id">
+                            </app-transcode-media-table>
+                        </ng-container>
+                    </div>
+                </mat-cell>
+            </ng-container>
+            <mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+            <mat-row   *matRowDef="let element; columns: displayedColumns;" class="example-element-row"
+                [class.example-expanded-row]="expandedElement === element"
+                (click)="expandedElement = expandedElement === element ? null : element">
+            </mat-row>
+            <mat-row *matRowDef="let row; columns: ['expandedDetail']" class="example-detail-row"></mat-row>
+        </mat-table>
+        <mat-paginator [length]="dataSource.totalElements$ | async" [pageSize]="pageSize"
+            [pageSizeOptions]="[5, 10, 25, 100]">
+        </mat-paginator>
+    </div>
+</div>
+<ng-template #noData>
+    <div class="row">
+        <div class="col-xl-3"></div>
+        <div class="col-xl-6">
+            <div class="alert alert-info">
+                <strong>Oh!</strong> No content at this moment. Please upload it.
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+    </div>
+</ng-template>
+<ng-template #noLogin>
+    <div class="row">
+        <div class="col-xl-3"></div>
+        <div class="col-xl-6">
+            <div class="alert alert-info">
+                <strong>Oh!</strong> Not logged to see the media.
+            </div>
+            <div class="col-xl-3"></div>
+        </div>
+    </div>
+</ng-template>

@@ -1,0 +1,42 @@
+.container {
+    display: flex;
+    flex-direction: column;
+    min-width: 450px;
+}
+
+.container > * {
+    width: 100%;
+}
+
+.form {
+    display: flex;
+    padding-top: 6px;
+}
+
+.mat-form-field {
+    font-size: 16px;
+    flex-grow: 1;
+}
+
+::ng-deep .mat-primary .mat-option.mat-selected:not(.mat-option-disabled) {
+    color: black;
+}
+
+.spinner-container {
+    position: relative;
+    top: 0;
+    left: 0;
+    bottom: 56px;
+    right: 0;
+    min-width: 350px;
+    // background: rgba(0, 0, 0, 0.15);
+    z-index: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+// .dialog-full{
+//     position: inherit;
+//     // min-height: 200px;
+//   }
