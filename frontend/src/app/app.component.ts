@@ -9,6 +9,7 @@ export const authConfig: AuthConfig = {
     scope: 'openid profile',
     showDebugInformation: false,
     responseType: 'code',
+    requireHttps: false
 };
 
 @Component({
