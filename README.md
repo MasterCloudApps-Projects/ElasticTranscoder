@@ -15,7 +15,7 @@
 - **Media-Storage**: Springboot application (JDK 13) connected to filesystem or glusterfs to serve the content or upload it.
 - **Media**: Springboot application (JDK 13) connected to dynamodb for crud requests of the original and transcode media.
 - **Transcoder-Status**: Springboot application (JDK 13) connected to dynamodb and sqs to read requests of transcoder-status queue.
-- **Transcoder-Handler**: Springboot application (JDK 13) 
+- **Transcoder-Handler**: Springboot application (JDK 13). Handler of all media.
 ### Configuration Mandatory
 - All microservices, including frontend, used [Okta](https://www.okta.com/) to secured it. Please, [read here](doc/okta.md) to configure it for this proyect or if you want use it.
 - For configure AWS SQS and DynamoDB use [this](doc/aws.md).
@@ -46,17 +46,17 @@ helm install traefik traefik/traefik
 
 Install CRDs
 ```
-kubectl apply -f https://raw.github
-kubectl apply -f 
+kubectl apply -f https://mastercloudapps-projects.github.io/ElasticTranscoder/charts/crds/cloudwatch-adapter.yaml
+kubectl apply -f https://mastercloudapps-projects.github.io/ElasticTranscoder/charts/crds/ingressroute.yaml 
 ```
 Install elastictranscoder
 ```
-helm repo add elastictranscoder https://github.io
+helm repo add elastictranscoder https://mastercloudapps-projects.github.io/ElasticTranscoder/charts
 helm repo update
 ```
-Download values.yaml and edited with your values
+Download /charts/elastic-transcoder/values.yaml and edited with your values
 ```
-helm install elastictranscoder elastictranscoder/elastictranscoder -f values.yaml
+helm install elastictranscoder elastictranscoder/elastic-transcoder -f values.yaml 
 ```
 
 ####

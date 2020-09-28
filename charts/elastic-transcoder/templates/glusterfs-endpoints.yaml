@@ -1,3 +1,4 @@
+{{- if .Values.global.gluster.enable }}
 apiVersion: v1
 kind: Endpoints
 metadata:
@@ -5,6 +6,7 @@ metadata:
   namespace: elastic-transcoder
 subsets:
 - addresses:
-  - ip: 192.168.3.145
+  - ip: {{ .Values.global.gluster.address }} 
   ports:
   - port: 1
+{{-end }}  

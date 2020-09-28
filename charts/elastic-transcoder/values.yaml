@@ -13,3 +13,4 @@ global:
   gluster:
     enable: false
     path: /elastictranscoder-data  
+    address: localhost
