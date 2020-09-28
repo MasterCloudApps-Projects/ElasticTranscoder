@@ -7,7 +7,7 @@ replicaCount: 1
 image:
   repository: elastictranscoder/frontend
   pullPolicy: IfNotPresent
-  tag: "e4ff694d"
+  tag: "523be523"
 
 imagePullSecrets: []
 nameOverride: ""
