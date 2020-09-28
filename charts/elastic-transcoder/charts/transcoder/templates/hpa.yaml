@@ -1,0 +1,21 @@
+{{- if .Values.autoscaling.enabled }}
+kind: HorizontalPodAutoscaler
+apiVersion: autoscaling/v2beta2
+metadata:
+  name: transcoder-scaler
+spec:
+  scaleTargetRef:
+    apiVersion: apps/v1beta1
+    kind: Deployment
+    name: transcoder
+  minReplicas: {{ .Values.autoscaling.minReplicas }}
+  maxReplicas: {{ .Values.autoscaling.maxReplicas }}
+  metrics:
+  - type: External
+    external:
+      metric:
+        name: sqs-transcoder-length
+      target:
+        type: AverageValue
+        averageValue: "1"    
+{{- end }}

@@ -1,6 +1,7 @@
 
 export const environment = {
   production: false,
-  apiUrl: 'https://api.videotranscoding.es/',
-  // apiUrl: 'http://localhost:8080/',
+  apiUrl: 'http://localhost:8080',
+  issuer: '',
+  client: ''
 };

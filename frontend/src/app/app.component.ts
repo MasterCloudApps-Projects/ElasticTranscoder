@@ -1,10 +1,11 @@
+import { environment } from './../environments/environment';
 import { OAuthService, JwksValidationHandler, AuthConfig } from 'angular-oauth2-oidc';
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 
 export const authConfig: AuthConfig = {
-    issuer: 'https://login.videotranscoding.es/oauth2/default',
+    issuer: environment.issuer ,
     redirectUri: window.location.origin,
-    clientId: '0oabsfibn6o1fRU704x6',
+    clientId: environment.client ,
     scope: 'openid profile',
     showDebugInformation: false,
     responseType: 'code',

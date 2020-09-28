@@ -1,0 +1,15 @@
+
+global:
+  aws:
+    accessKeyId: ***
+    secretAccessKey: **
+  okta:
+    issuer: ****
+    clientId: ***
+    clientSecret:  ****
+    frontendClientId: ****
+  url:
+    backend: http://api.elastictranscoder
+  gluster:
+    enable: false
+    path: /elastictranscoder-data  

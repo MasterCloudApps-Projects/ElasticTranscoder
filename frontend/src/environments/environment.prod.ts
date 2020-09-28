@@ -1,4 +1,6 @@
 export const environment = {
   production: true,
-  apiUrl: 'https://api.videotranscoding.es/',
+  apiUrl: 'BACKEND_API_URL',
+  issuer: 'OKTA_ISSUER',
+  client: 'OKTA_CLIENT_ID'
 };

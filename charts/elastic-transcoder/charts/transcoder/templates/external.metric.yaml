@@ -1,0 +1,34 @@
+apiVersion: metrics.aws/v1alpha1
+kind: ExternalMetric
+metadata:
+  name: sqs-transcoder-length
+spec:
+  name: sqs-transcoder-length
+  resource:
+    resource: "deployment"
+  queries:
+    - id: sqs_transcoder_length
+      metricStat:
+        metric:
+          namespace: "AWS/SQS"
+          metricName: "ApproximateNumberOfMessagesVisible"
+          dimensions:
+            - name: QueueName
+              value: "transcoder"
+        period: 60
+        stat: Sum
+        unit: Count
+    - id: sqs_transcoder_length_not_visible
+      metricStat:
+        metric:
+          namespace: "AWS/SQS"
+          metricName: "ApproximateNumberOfMessagesNotVisible"
+          dimensions:
+            - name: QueueName
+              value: "transcoder"
+        period: 60
+        stat: Sum
+        unit: Count  
+    - id: sqs_transcoder_length_sum
+      expression: "sqs_transcoder_length + sqs_transcoder_length_not_visible"
+      returnData: true  

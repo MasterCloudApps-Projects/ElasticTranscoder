@@ -1,0 +1,64 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: k8s-cloudwatch-adapter
+  name: k8s-cloudwatch-adapter
+  namespace: custom-metrics
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: k8s-cloudwatch-adapter
+  template:
+    metadata:
+      labels:
+        app: k8s-cloudwatch-adapter
+      name: k8s-cloudwatch-adapter
+    spec:
+      serviceAccountName: k8s-cloudwatch-adapter
+      securityContext:
+        fsGroup: 65534
+      containers:
+      - name: k8s-cloudwatch-adapter
+        image: chankh/k8s-cloudwatch-adapter:latest
+        args:
+        - /adapter
+        - --cert-dir=/tmp
+        - --secure-port=6443
+        - --logtostderr=true
+        - --v=2
+        ports:
+        - containerPort: 6443
+          name: https
+        - containerPort: 8080
+          name: http
+        volumeMounts:
+        - mountPath: /tmp
+          name: temp-vol
+        env:
+          - name: AWS_REGION
+            value: eu-west-1
+          - name: AWS_ACCESS_KEY_ID
+            value: {{ .Values.global.aws.accessKeyId }}
+          - name: AWS_SECRET_ACCESS_KEY
+            value: {{ .Values.global.aws.secretAccessKey }}      
+      volumes:
+      - name: temp-vol
+        emptyDir: {}
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: k8s-cloudwatch-adapter
+  namespace: custom-metrics
+spec:
+  ports:
+  - name: https
+    port: 443
+    targetPort: 6443
+  - name: http
+    port: 80
+    targetPort: 8080
+  selector:
+    app: k8s-cloudwatch-adapter

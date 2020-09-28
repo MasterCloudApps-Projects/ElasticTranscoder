@@ -1,0 +1,33 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: ingress-route-http
+spec:
+  entryPoints:
+    - web
+  routes:
+  - match: Host(`api.elastictranscoder`) && PathPrefix(`/files`)
+    kind: Rule
+    services:
+    - name: media-storage
+      port: 8080
+  - match: Host(`api.elastictranscoder`) && PathPrefix(`/media`)
+    kind: Rule
+    services:
+    - name: media
+      port: 8080
+  - match: Host(`api.elastictranscoder`) && PathPrefix(`/status`)
+    kind: Rule
+    services:
+    - name: transcoder-status
+      port: 8080
+  - match: Host(`api.elastictranscoder`) && PathPrefix(`/transcodes`)
+    kind: Rule
+    services:
+    - name: transcoder-handler
+      port: 8080
+  - match: Host(`frontend.elastictranscoder`) &&PathPrefix(`/`)
+    kind: Rule
+    services:
+    - name: frontend
+      port: 80

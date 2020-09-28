@@ -1,0 +1,99 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "media-storage.name" . }}
+  labels:
+    {{- include "media-storage.labels" . | nindent 4 }}
+spec:
+{{- if not .Values.autoscaling.enabled }}
+  replicas: {{ .Values.replicaCount }}
+{{- end }}
+  selector:
+    matchLabels:
+      {{- include "media-storage.selectorLabels" . | nindent 6 }}
+  template:
+    metadata:
+    {{- with .Values.podAnnotations }}
+      annotations:
+        {{- toYaml . | nindent 8 }}
+    {{- end }}
+      labels:
+        {{- include "media-storage.selectorLabels" . | nindent 8 }}
+    spec:
+      {{- with .Values.imagePullSecrets }}
+      imagePullSecrets:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      serviceAccountName: {{ include "media-storage.serviceAccountName" . }}
+      securityContext:
+        {{- toYaml .Values.podSecurityContext | nindent 8 }}
+      {{- if .Values.global.gluster.enable }}
+      volumes:
+          - name: elastictranscoder-data
+            glusterfs:
+              endpoints: glusterfs-cluster
+              path: {{ .Values.global.gluster.path }} 
+              readOnly: false
+      {{- end }}        
+      containers:
+        - name: {{ .Chart.Name }}
+          securityContext:
+            {{- toYaml .Values.securityContext | nindent 12 }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag | default .Chart.AppVersion }}"
+          imagePullPolicy: {{ .Values.image.pullPolicy }}
+          # command: [ "/bin/bash", "-c", "--" ]
+          # args: [ "while true; do sleep 100; done;" ]
+          ports:
+            - name: http
+              containerPort: 8080
+              protocol: TCP
+          livenessProbe:
+            httpGet:
+              path: /actuator/health/liveness
+              port: http
+            initialDelaySeconds: 60  
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 6
+            successThreshold: 1
+          readinessProbe:
+            httpGet:
+              path: /actuator/health/readiness
+              port: http
+            initialDelaySeconds: 60  
+            periodSeconds: 10
+            timeoutSeconds: 10
+            failureThreshold: 3
+            successThreshold: 1 
+          resources:
+            {{- toYaml .Values.resources | nindent 12 }}
+          {{- if .Values.global.gluster.enable }}  
+          volumeMounts:
+            - name: elastictranscoder-data
+              mountPath: /media/elastictranscoder-data
+          {{- end }}   
+          env:
+            - name: SPRING_PROFILES_ACTIVE
+              value: prod,host
+            - name: AWS_ACCESS_KEY_ID
+              value: {{ .Values.global.aws.accessKeyId }} 
+            - name: AWS_SECRET_ACCESS_KEY
+              value: {{ .Values.global.aws.secretAccessKey }}   
+            - name: OKTA_OAUTH2_ISSUER
+              value: {{ .Values.global.okta.issuer }}
+            - name: OKTA_OAUTH2_CLIENT_ID
+              value: {{ .Values.global.okta.clientId }}
+            - name: OKTA_OAUTH2_CLIENT_SECRET
+              value: {{ .Values.global.okta.clientSecret }}                   
+      {{- with .Values.nodeSelector }}
+      nodeSelector:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.affinity }}
+      affinity:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}
+      {{- with .Values.tolerations }}
+      tolerations:
+        {{- toYaml . | nindent 8 }}
+      {{- end }}

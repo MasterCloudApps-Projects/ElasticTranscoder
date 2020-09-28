@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: "{{ include "transcoder-status.name" . }}-test-connection"
+  labels:
+    {{- include "transcoder-status.labels" . | nindent 4 }}
+  annotations:
+    "helm.sh/hook": test-success
+spec:
+  containers:
+    - name: wget
+      image: busybox
+      command: ['wget']
+      args: ['{{ include "transcoder-status.name" . }}:{{ .Values.service.port }}']
+  restartPolicy: Never

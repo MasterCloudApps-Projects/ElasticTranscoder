@@ -1,0 +1,8 @@
+apiVersion: v2
+name: elastic-transcoder
+description: A Helm chart for Kubernetes
+type: application
+
+# Chart Version
+version: 0.5.27
+appVersion: 0.5.0
