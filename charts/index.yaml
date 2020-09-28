@@ -1,0 +1,14 @@
+apiVersion: v1
+entries:
+  elastic-transcoder:
+  - apiVersion: v2
+    appVersion: 0.5.0
+    created: "2020-09-28T22:59:38.246571628+02:00"
+    description: A Helm chart for Kubernetes
+    digest: ee1b9e94d9f3d8c2aa04ca2ea457400177e75224e1104c6bb2b10d60e77a5081
+    name: elastic-transcoder
+    type: application
+    urls:
+    - https://mastercloudapps-projects.github.io/ElasticTranscoder/charts/elastic-transcoder-0.5.27.tgz
+    version: 0.5.27
+generated: "2020-09-28T22:59:38.242268466+02:00"

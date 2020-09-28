@@ -1,13 +1,13 @@
 
 global:
   aws:
-    accessKeyId: ***
-    secretAccessKey: **
+    accessKeyId: XX
+    secretAccessKey: XX
   okta:
-    issuer: ****
-    clientId: ***
-    clientSecret:  ****
-    frontendClientId: ****
+    issuer: XX
+    clientId: XX
+    clientSecret:  XX
+    frontendClientId: XX
   url:
     backend: http://api.elastictranscoder
   gluster:
