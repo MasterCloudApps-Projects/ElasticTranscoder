@@ -57,9 +57,7 @@ public class TranscoderStatusServiceImpl implements TranscoderStatusService {
         if (StreamSupport
                 .stream(transcodeMediaRepository.findByFlatMediaId(transcodeMedia.getFlatMediaId()).spliterator(),
                         false)
-                .filter(transcodeMediaS -> Double.valueOf(transcodeMediaS.getProcessed())
-                        .equals(Double.parseDouble("100")))
-                .findAny().isEmpty()) {
+                .filter(TranscodeMedia::getActive).findAny().isEmpty()) {
             Optional<FlatMedia> optFlatMedia = flatMediaRepository.findById(transcodeMedia.getFlatMediaId());
             if (optFlatMedia.isPresent()) {
                 optFlatMedia.get().setActive(false);

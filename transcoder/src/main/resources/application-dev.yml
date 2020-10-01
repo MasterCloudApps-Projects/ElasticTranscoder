@@ -5,7 +5,7 @@ path:
 logging:
   level:
     es:
-      videotranscoding: INFO
+      videotranscoding: DEBUG
 cloud:
   aws:
     region:

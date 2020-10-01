@@ -1,13 +1,12 @@
 package es.videotranscoding.transcoder.service.impl;
 
 import java.io.IOException;
-import java.util.concurrent.Executors;
+import java.util.concurrent.ExecutorService;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
 import javax.annotation.PostConstruct;
 
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import es.videotranscoding.transcoder.dto.TranscodeMediaDTO;
@@ -15,22 +14,28 @@ import es.videotranscoding.transcoder.exception.TranscoderException;
 import es.videotranscoding.transcoder.exception.TranscoderRuntimeException;
 import es.videotranscoding.transcoder.service.TranscodeService;
 import es.videotranscoding.transcoder.utils.StreamGobbler;
+import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 
 @Service
 @Slf4j
+@RequiredArgsConstructor
 public class TranscodeServiceImpl implements TranscodeService {
 
     private final String PROGRESS_VIDEO_PATTERN = "(?<=time=)[\\d:.]*";
-
+    private final String DURATION_VIDEO_PATTERN = "(?<=Duration: )[^,]*";
     private Pattern progreesVideoPattern;
+    private Pattern durationVideoPattern;
+    private double finalTime;
 
-    @Autowired
-    private ProducerService producerService;
+    private final ProducerService producerService;
+
+    private final ExecutorService executorService;
 
     @PostConstruct
     public void init() {
         progreesVideoPattern = Pattern.compile(PROGRESS_VIDEO_PATTERN);
+        durationVideoPattern = Pattern.compile(DURATION_VIDEO_PATTERN);
     }
 
     @Override
@@ -39,15 +44,16 @@ public class TranscodeServiceImpl implements TranscodeService {
         transcodeMediaDTO.setActive(true);
         producerService.sendStatus(transcodeMediaDTO);
         try {
-            double finalTime = 0;
+            finalTime = 0;
             Process process = new ProcessBuilder("bash", "-c", transcodeMediaDTO.getCommand()).redirectErrorStream(true)
                     .start();
             StreamGobbler streamGobbler = new StreamGobbler(process.getInputStream(), line -> {
                 log.debug("FFMPEG commandline: {}", line);
                 Matcher progressMatcher = progreesVideoPattern.matcher(line);
+                Matcher durationVideoMatcher = durationVideoPattern.matcher(line);
                 if (progressMatcher.find()) {
                     double diference = getDifference(finalTime, progressMatcher.group(0));
-                    transcodeMediaDTO.setProcessed(diference);
+                     transcodeMediaDTO.setProcessed(diference);
                     if ((Math.round(transcodeMediaDTO.getProcessed() * 100.0) / 100.0) != 100) {
                         try {
                             producerService.sendStatus(transcodeMediaDTO);
@@ -57,8 +63,12 @@ public class TranscodeServiceImpl implements TranscodeService {
                         }
                     }
                 }
+                if (durationVideoMatcher.find()) {
+                    log.debug("durationVideoMatcher found: {}", durationVideoMatcher.group(0));
+                    finalTime = getDuration(durationVideoMatcher.group(0));
+                }
             });
-            Executors.newSingleThreadExecutor().submit(streamGobbler);
+            executorService.submit(streamGobbler);
             int status = process.waitFor();
             if (status != 0) {
                 transcodeMediaDTO.setProcessed(0);
@@ -96,5 +106,24 @@ public class TranscodeServiceImpl implements TranscodeService {
         } catch (NumberFormatException e) {
             return 0;
         }
+    }
+
+    /**
+     * The duration of the video
+     * 
+     * @param group
+     * @return
+     */
+    private double getDuration(String group) {
+        String[] hms = group.split(":");
+        double toReturn = 0;
+        try {
+            toReturn = Integer.parseInt(hms[0]) * 3600 + Integer.parseInt(hms[1]) * 60 + Double.parseDouble(hms[2]);
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        log.info("getDuration return: {}", toReturn);
+        return toReturn;
     }
 }

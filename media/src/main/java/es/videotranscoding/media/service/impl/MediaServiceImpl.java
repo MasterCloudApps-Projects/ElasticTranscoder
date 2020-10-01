@@ -34,7 +34,7 @@ public class MediaServiceImpl implements MediaService {
 
     private final ProducerService producerService;
 
-    // TODO: ADMIN
+    // TODO: ADMIN and users
     @Override
     public Page<FlatMediaDTO> getAll(Pageable pageable) {
         String principal = SecurityContextHolder.getContext().getAuthentication().getName();

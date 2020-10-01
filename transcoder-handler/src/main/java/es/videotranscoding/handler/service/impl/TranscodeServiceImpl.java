@@ -43,7 +43,7 @@ public class TranscodeServiceImpl implements TranscodeService {
         }
         switch (flatMedia.getType()) {
             case "audio":
-                // TODO:
+                // TODO: audio
                 throw new ResponseStatusException(HttpStatus.NOT_IMPLEMENTED, "Audio conversion not implemented");
             case "video":
                 videoTranscodeServiceImpl.createTranscodes(flatMedia, fFmpegArgumentsDTOs);

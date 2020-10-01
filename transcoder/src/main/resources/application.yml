@@ -5,3 +5,13 @@ spring:
     multipart:
       max-file-size: 5GB
       max-request-size: 5GB
+management:
+  health:
+    probes:
+      enabled: true
+  endpoints:
+    web:
+      exposure: 
+        include: "*"
+    shutdown:
+      enabled: true

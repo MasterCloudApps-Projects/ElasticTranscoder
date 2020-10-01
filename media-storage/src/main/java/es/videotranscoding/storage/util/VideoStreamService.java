@@ -39,7 +39,6 @@ public class VideoStreamService {
         long rangeEnd;
         byte[] data;
         Long fileSize;
-        // String fullFileName = fileName + "." + fileType;
         String fullFileName = fileName;
         try {
             fileSize = getFileSize(fullFileName);

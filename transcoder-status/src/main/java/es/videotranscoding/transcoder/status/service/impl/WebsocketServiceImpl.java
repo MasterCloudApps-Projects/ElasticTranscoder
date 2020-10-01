@@ -39,13 +39,13 @@ public class WebsocketServiceImpl implements WebsocketService {
 
     @Scheduled(fixedDelay = 4000)
     private void scheduleWebsocket() {
-        log.debug("Sending message to WS");
+        log.debug("Sending message to WS transcodes");
         List<TranscodeMedia> transcodeMedias = StreamSupport
                 .stream(transcodeMediaRepository.findAll().spliterator(), false)
                 .filter(TranscodeMedia::getActive)
                 .collect(Collectors.toList());
         sendStatus(transcodeMedias.stream().map(tm -> modelMapper.map(tm, TranscodeMediaStatusDTO.class))
                 .collect(Collectors.toList()));
-        log.debug("Sended message to WS");
+        log.debug("Sended message to WS transcodes");
     }
 }
