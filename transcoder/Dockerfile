@@ -3,10 +3,8 @@ FROM adoptopenjdk:13.0.2_8-jre-hotspot
 RUN apt update
 RUN apt install -y software-properties-common
 RUN add-apt-repository -y ppa:jonathonf/ffmpeg-4
-RUN apt install -y ffmpeg 
+RUN apt install -y ffmpeg
 RUN ffmpeg -version
-### To shutdown gracefully need post call
-RUN apt install -y curl
 
 COPY target/*.jar app.jar
 EXPOSE 8080
