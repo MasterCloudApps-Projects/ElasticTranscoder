@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @RequestMapping("/transcodes")
 @RestController
 @RequiredArgsConstructor
-@CrossOrigin({ "http://localhost:4200", "https://videotranscoding.es" })
+@CrossOrigin({ "http://localhost:4200", "https://lavandadelpatio.es" })
 @Slf4j
 public class TranscoderRestController {
 

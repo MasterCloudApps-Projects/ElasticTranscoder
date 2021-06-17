@@ -20,7 +20,7 @@ import lombok.RequiredArgsConstructor;
 @RestController
 @RequestMapping("/media")
 @RequiredArgsConstructor
-@CrossOrigin({ "http://localhost:4200", "https://videotranscoding.es" })
+@CrossOrigin({ "http://localhost:4200", "https://lavandadelpatio.es" })
 public class MediaRestController {
 
     private final MediaService mediaServiceImpl;

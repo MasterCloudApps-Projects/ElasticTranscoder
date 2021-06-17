@@ -32,7 +32,7 @@ import reactor.core.publisher.Mono;
 @RestController
 @RequestMapping("/files")
 @RequiredArgsConstructor
-@CrossOrigin({ "http://localhost:4200", "https://videotranscoding.es" })
+@CrossOrigin({ "http://localhost:4200", "https://lavandadelpatio.es" })
 public class FilesRestController {
 
     private final StorageService storageService;
